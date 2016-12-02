@@ -10,5 +10,5 @@ public interface CoursesService {
 
     @GET("/studentstats")
     Call<CoursesContainerModel> getCourses(
-            @Query("limit") int limit, @Query("offset") long offset);
+            @Query("offset") long offset, @Query("limit") int limit);
 }
