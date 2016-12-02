@@ -46,16 +46,16 @@ public class CoursesAdapter extends BaseListAdapter
             (CourseViewHolder holder, int position, CourseModel item) {
         setValueNumberWithLabel(holder.getId(), item.getId(), R.string.id);
         setValueNumberWithLabel(holder.getCourseId(),
-                item.getId(), R.string.course_id);
+                item.getCourseId(), R.string.course_id);
         setValueNumberWithLabel(holder.getCourseCategoryId(),
-                item.getId(), R.string.course_category_id);
+                item.getCourseCategoryId(), R.string.course_category_id);
     }
 
     private void setValueNumberWithLabel
             (TextView textView, long value, int labelResourceId) {
         String label = context.getString(labelResourceId);
         String fullText = String.format(Locale.getDefault(),
-                "%s: %d", label, value);
+                "%s %d", label, value);
 
         textView.setText(fullText);
     }

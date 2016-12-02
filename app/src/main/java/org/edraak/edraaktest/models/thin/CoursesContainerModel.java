@@ -10,6 +10,8 @@ import java.util.List;
  */
 public class CoursesContainerModel implements Serializable {
 
+    private static final long DEFAULT_OFFSET = 0;
+
     @SerializedName("next_offset")
     private long nextOffset;
 
@@ -21,6 +23,10 @@ public class CoursesContainerModel implements Serializable {
 
     public long getNextOffset() {
         return nextOffset;
+    }
+
+    public boolean isValidNextOffset() {
+        return nextOffset != DEFAULT_OFFSET;
     }
 
     public long getOffset() {

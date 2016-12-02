@@ -22,13 +22,13 @@
             android:id="@+id/courseId"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_one_unit" />
+            android:layout_marginTop="@dimen/margin_half_unit" />
 
         <TextView
             android:id="@+id/courseCategoryId"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_one_unit" />
+            android:layout_marginTop="@dimen/margin_half_unit" />
 
     </LinearLayout>
 
