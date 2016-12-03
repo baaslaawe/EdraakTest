@@ -7,6 +7,10 @@ import org.edraak.edraaktest.adapters.CoursesAdapter;
 import org.edraak.edraaktest.models.services.CoursesService;
 import org.edraak.edraaktest.models.thin.CoursesContainerModel;
 
+/**
+ * The courses loader that gets data then change it to be ready
+ * to connecting with the view
+ */
 public class CoursesLoader extends LoaderRequestManager
         <CoursesService, CoursesContainerModel> {
 
