@@ -49,6 +49,10 @@ public class CoursesLoader extends LoaderRequestManager
     protected void onResponse(CoursesContainerModel response) {
         super.onResponse(response);
 
+        useThisData(response);
+    }
+
+    private void useThisData(CoursesContainerModel response) {
         if (hasToRenew)
             coursesAdapter.resetItems();
 
