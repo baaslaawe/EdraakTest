@@ -23,8 +23,10 @@ public abstract class BaseListAdapter
 
     private List<TModel> list;
     private ItemsStates itemsStates = ItemsStates.LOADING;
+    private boolean endless;
     private boolean isLoadingMore;
     private OnItemClickListener onItemClickListener;
+    private OnLastItemViewedListener onLastItemViewedListener;
 
     /**
      * Returns the total number of items in the data set hold by the adapter.
@@ -150,6 +152,8 @@ public abstract class BaseListAdapter
         if (rowType == RowType.ITEM) {
             item = getList().get(position);
             onRegularBindViewHolder((VH) holder, position, item);
+
+            checkLastItem(position);
         }
     }
 
@@ -161,7 +165,27 @@ public abstract class BaseListAdapter
             setItemsStates(ItemsStates.EMPTY);
     }
 
-    protected abstract void onRegularBindViewHolder(VH holder, int position, TModel item);
+    protected abstract void onRegularBindViewHolder
+            (VH holder, int position, TModel item);
+
+    private void checkLastItem(int position) {
+        if (isEndless() && isLastItemPosition(position))
+            onLastItemViewed(position);
+    }
+
+    private boolean isLastItemPosition(int position) {
+        if (position == 0)
+            return false;
+
+        int lastPosition = getItemCount() - 1;
+
+        return position == lastPosition;
+    }
+
+    private void onLastItemViewed(int position) {
+        if (onLastItemViewedListener != null)
+            onLastItemViewedListener.onLastItemViewed(position);
+    }
 
     /**
      * Append list to the current list
@@ -290,6 +314,24 @@ public abstract class BaseListAdapter
     }
 
     /**
+     * Is it endless list
+     *
+     * @return {@link true} if it is endless list
+     */
+    public boolean isEndless() {
+        return endless;
+    }
+
+    /**
+     * Specify that it is endless list
+     *
+     * @param endless {@link true} if it is endless list
+     */
+    public void setEndless(boolean endless) {
+        this.endless = endless;
+    }
+
+    /**
      * Is loading data performing now
      *
      * @return {@link true} if loading data is performing now
@@ -299,12 +341,18 @@ public abstract class BaseListAdapter
     }
 
     /**
-     * Spesify that loading data is performing now
+     * Specify that loading data is performing now
      *
      * @param isLoadingMore {@link true} if loading data is performing now
      */
     public void setIsLoadingMore(boolean isLoadingMore) {
         this.isLoadingMore = isLoadingMore;
+
+        try {
+            notifyDataSetChanged();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -314,6 +362,15 @@ public abstract class BaseListAdapter
      */
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
+    }
+
+    /**
+     * Register a callback to be invoked when the last item is viewed
+     *
+     * @param onLastItemViewedListener the callback that will run
+     */
+    public void setOnLastItemViewedListener(OnLastItemViewedListener onLastItemViewedListener) {
+        this.onLastItemViewedListener = onLastItemViewedListener;
     }
 
     protected void onItemClick(int position) {
@@ -337,6 +394,13 @@ public abstract class BaseListAdapter
      */
     public interface OnItemClickListener {
         void onItemClick(int position);
+    }
+
+    /**
+     * Interface definition for a callback to be invoked when the last item is viewed
+     */
+    public interface OnLastItemViewedListener {
+        void onLastItemViewed(int position);
     }
 
     /**

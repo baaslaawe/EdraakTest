@@ -2,6 +2,7 @@ package org.edraak.edraaktest.models.loaders;
 
 import android.content.Context;
 
+import org.edraak.edraaktest.adapters.BaseListAdapter;
 import org.edraak.edraaktest.adapters.CoursesAdapter;
 import org.edraak.edraaktest.models.services.CoursesService;
 import org.edraak.edraaktest.models.thin.CoursesContainerModel;
@@ -9,9 +10,10 @@ import org.edraak.edraaktest.models.thin.CoursesContainerModel;
 public class CoursesLoader extends LoaderRequestManager
         <CoursesService, CoursesContainerModel> {
 
-    private static final int LIMIT = 20;
+    private static final long DEFAULT_OFFSET = 0;
+    private static final int LIMIT = 10;
 
-    private CoursesContainerModel coursesContainerModel;
+    private long nextOffset = DEFAULT_OFFSET;
     private CoursesAdapter coursesAdapter;
     private boolean hasToRenew = true;
 
@@ -29,18 +31,35 @@ public class CoursesLoader extends LoaderRequestManager
 
     private void init(Context context) {
         coursesAdapter = new CoursesAdapter(context);
+        coursesAdapter.setEndless(true);
+
+        coursesAdapter.setOnLastItemViewedListener(new BaseListAdapter.OnLastItemViewedListener() {
+            @Override
+            public void onLastItemViewed(int position) {
+                checkToRetrieveNext();
+            }
+        });
     }
 
     @Override
     protected void onResponse(CoursesContainerModel response) {
         super.onResponse(response);
 
-        this.coursesContainerModel = response;
-
         if (hasToRenew)
             coursesAdapter.resetItems();
 
         coursesAdapter.addItems(response.getResults());
+
+        this.nextOffset = response.getMeta().getNextOffset();
+
+        coursesAdapter.setIsLoadingMore(false);
+    }
+
+    private void checkToRetrieveNext() {
+        if (!coursesAdapter.isLoadingMore()) {
+            retrieveNext();
+            coursesAdapter.setIsLoadingMore(true);
+        }
     }
 
     /**
@@ -48,7 +67,7 @@ public class CoursesLoader extends LoaderRequestManager
      */
     public void retrieve() {
         this.hasToRenew = true;
-        this.coursesContainerModel = null;
+        this.nextOffset = DEFAULT_OFFSET;
 
         retrieveFromSource();
     }
@@ -63,8 +82,6 @@ public class CoursesLoader extends LoaderRequestManager
     }
 
     private void retrieveFromSource() {
-        this.hasToRenew = true;
-
         defineMethod();
 
         enqueue();
@@ -72,16 +89,14 @@ public class CoursesLoader extends LoaderRequestManager
 
     private void defineMethod() {
         if (thereIsNext())
-            setCaller(getService().getCourses(LIMIT,
-                    coursesContainerModel.getNextOffset()));
+            setCaller(getService().getCourses(LIMIT, nextOffset));
 
         else
             setCaller(getService().getCourses(LIMIT));
     }
 
     private boolean thereIsNext() {
-        return coursesContainerModel != null
-                && coursesContainerModel.isValidNextOffset();
+        return nextOffset != DEFAULT_OFFSET;
     }
 
     public CoursesAdapter getCoursesAdapter() {

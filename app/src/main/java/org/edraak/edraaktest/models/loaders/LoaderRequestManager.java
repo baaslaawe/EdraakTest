@@ -6,6 +6,8 @@ import org.edraak.edraaktest.R;
 
 import java.io.IOException;
 
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -67,12 +69,22 @@ public class LoaderRequestManager<TService, TReturn> {
     }
 
     private TService buildService() {
+        OkHttpClient client = buildClient();
+
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(baseUrl)
+                .client(client)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
         return retrofit.create(classOfTService);
+    }
+
+    private OkHttpClient buildClient() {
+        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+
+        return new OkHttpClient.Builder().addInterceptor(interceptor).build();
     }
 
     public TService getService() {
