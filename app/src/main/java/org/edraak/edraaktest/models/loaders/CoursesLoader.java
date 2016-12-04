@@ -108,6 +108,8 @@ public class CoursesLoader extends LoaderRequestManager
      * Retrieve data and clear the old
      */
     public void retrieve() {
+        coursesAdapter.resetItems();
+
         this.hasToRenew = true;
         this.nextOffset = DEFAULT_OFFSET;
 

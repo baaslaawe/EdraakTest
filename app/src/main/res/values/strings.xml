@@ -3,6 +3,8 @@
     <string name="no_items">No items to show</string>
     <string name="please_wait">Please wait!</string>
 
+    <string name="action_refresh">Refresh</string>
+
     <string name="id">ID:</string>
     <string name="course_id">Course ID:</string>
     <string name="course_category_id">Course Category ID:</string>
