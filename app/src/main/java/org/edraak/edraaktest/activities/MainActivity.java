@@ -57,6 +57,6 @@ public class MainActivity extends BaseActivity {
     protected void onStart() {
         super.onStart();
 
-        coursesLoader.retrieve();
+        coursesLoader.readCachedOrRetrieve();
     }
 }

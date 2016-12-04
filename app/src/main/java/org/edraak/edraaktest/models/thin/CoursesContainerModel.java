@@ -23,4 +23,8 @@ public class CoursesContainerModel implements Serializable {
     public List<CourseModel> getResults() {
         return results;
     }
+
+    public void setResults(List<CourseModel> results) {
+        this.results = results;
+    }
 }

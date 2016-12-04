@@ -5,7 +5,10 @@ import android.content.Context;
 import org.edraak.edraaktest.adapters.BaseListAdapter;
 import org.edraak.edraaktest.adapters.CoursesAdapter;
 import org.edraak.edraaktest.models.services.CoursesService;
+import org.edraak.edraaktest.models.thin.CourseModel;
 import org.edraak.edraaktest.models.thin.CoursesContainerModel;
+
+import java.util.List;
 
 /**
  * The courses loader that gets data then change it to be ready
@@ -19,6 +22,8 @@ public class CoursesLoader extends LoaderRequestManager
 
     private long nextOffset = DEFAULT_OFFSET;
     private CoursesAdapter coursesAdapter;
+    private CoursesCachingManager coursesCachingManager;
+
     private boolean hasToRenew = true;
 
     /**
@@ -34,6 +39,12 @@ public class CoursesLoader extends LoaderRequestManager
     }
 
     private void init(Context context) {
+        coursesCachingManager = new CoursesCachingManager(context);
+
+        initAdapter(context);
+    }
+
+    private void initAdapter(Context context) {
         coursesAdapter = new CoursesAdapter(context);
         coursesAdapter.setEndless(true);
 
@@ -50,6 +61,8 @@ public class CoursesLoader extends LoaderRequestManager
         super.onResponse(response);
 
         useThisData(response);
+
+        cacheToFile(response, coursesAdapter.getList());
     }
 
     private void useThisData(CoursesContainerModel response) {
@@ -63,11 +76,32 @@ public class CoursesLoader extends LoaderRequestManager
         coursesAdapter.setIsLoadingMore(false);
     }
 
+    private void cacheToFile(CoursesContainerModel response,
+                             List<CourseModel> newList) {
+        coursesCachingManager.combineAndSave(response, newList);
+    }
+
     private void checkToRetrieveNext() {
         if (!coursesAdapter.isLoadingMore()) {
             retrieveNext();
             coursesAdapter.setIsLoadingMore(true);
         }
+    }
+
+    /**
+     * Read cached, if there is no cached data, retrieve data
+     */
+    public void readCachedOrRetrieve() {
+        CoursesContainerModel coursesContainerModel = readCached();
+
+        if (coursesContainerModel == null)
+            retrieve();
+        else
+            useThisData(coursesContainerModel);
+    }
+
+    private CoursesContainerModel readCached() {
+        return coursesCachingManager.readCourses();
     }
 
     /**
