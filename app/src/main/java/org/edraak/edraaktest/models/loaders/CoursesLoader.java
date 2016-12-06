@@ -4,6 +4,7 @@ import android.content.Context;
 
 import org.edraak.edraaktest.adapters.BaseListAdapter;
 import org.edraak.edraaktest.adapters.CoursesAdapter;
+import org.edraak.edraaktest.models.managers.BestItemsManagers;
 import org.edraak.edraaktest.models.services.CoursesService;
 import org.edraak.edraaktest.models.thin.CourseModel;
 import org.edraak.edraaktest.models.thin.CoursesContainerModel;
@@ -21,8 +22,11 @@ public class CoursesLoader extends LoaderRequestManager
     private static final int LIMIT = 10;
 
     private long nextOffset = DEFAULT_OFFSET;
-    private CoursesAdapter coursesAdapter;
     private CoursesCachingManager coursesCachingManager;
+
+    private CoursesAdapter coursesAdapter;
+    private CoursesAdapter best100IdsAdapter;
+    private CoursesAdapter best5CategoriesAdapter;
 
     private boolean hasToRenew = true;
 
@@ -41,10 +45,10 @@ public class CoursesLoader extends LoaderRequestManager
     private void init(Context context) {
         coursesCachingManager = new CoursesCachingManager(context);
 
-        initAdapter(context);
+        initAdapters(context);
     }
 
-    private void initAdapter(Context context) {
+    private void initAdapters(Context context) {
         coursesAdapter = new CoursesAdapter(context);
         coursesAdapter.setEndless(true);
 
@@ -54,6 +58,9 @@ public class CoursesLoader extends LoaderRequestManager
                 checkToRetrieveNext();
             }
         });
+
+        best100IdsAdapter = new CoursesAdapter(context);
+        best5CategoriesAdapter = new CoursesAdapter(context);
     }
 
     @Override
@@ -74,6 +81,21 @@ public class CoursesLoader extends LoaderRequestManager
         this.nextOffset = response.getMeta().getNextOffset();
 
         coursesAdapter.setIsLoadingMore(false);
+
+        linkBestCourses(coursesAdapter.getList());
+    }
+
+    private void linkBestCourses(List<CourseModel> courses) {
+        BestItemsManagers bestItemsManagers =
+                new BestItemsManagers(courses);
+
+        List<CourseModel> best100Ids = bestItemsManagers.getBest100CoursesBasedOnId();
+        best100IdsAdapter.resetItems();
+        best100IdsAdapter.addItems(best100Ids);
+
+        List<CourseModel> best5Categories = bestItemsManagers.getBest5CoursesBasedOnCategory();
+        best5CategoriesAdapter.resetItems();
+        best5CategoriesAdapter.addItems(best5Categories);
     }
 
     private void cacheToFile(CoursesContainerModel response,
@@ -145,5 +167,13 @@ public class CoursesLoader extends LoaderRequestManager
 
     public CoursesAdapter getCoursesAdapter() {
         return coursesAdapter;
+    }
+
+    public CoursesAdapter getBest100IdsAdapter() {
+        return best100IdsAdapter;
+    }
+
+    public CoursesAdapter getBest5CategoriesAdapter() {
+        return best5CategoriesAdapter;
     }
 }
