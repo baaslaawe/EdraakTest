@@ -20,4 +20,7 @@
     <string name="all_courses">All Courses</string>
     <string name="best_100_ids">Best 100 IDs</string>
     <string name="best_5_categories">Best 5 Categories</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
