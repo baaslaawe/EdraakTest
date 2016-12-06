@@ -39,10 +39,9 @@ For the endless list (RecyclerVew) I implemented it using the adapter, so I crea
 
 Screenshots
 -----------------
-- Screenshot 1
-![Screenshot 1]](https://raw.github.com/bilalsammour/EdraakTest/master/screenshot1.png)
-- Screenshot 2
-![Screenshot 2]](https://raw.github.com/bilalsammour/EdraakTest/master/screenshot2.png)
+- Screenshot 1<br /><img src="screenshot1.png" width="100%" />
+
+- Screenshot 2<br /><img src="screenshot2.png" width="100%" />
 
 [1]: https://www.edraak.org
 [2]: https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller "MVC"
