@@ -1,4 +1,4 @@
-package org.edraak.edraaktest.models.loaders;
+package org.edraak.edraaktest.models.loaders.bestitems;
 
 import android.content.Context;
 
@@ -7,7 +7,7 @@ import org.edraak.edraaktest.models.thin.CourseModel;
 
 import java.util.List;
 
-public class Best100IDsLoader extends BestItemsLoader {
+public class BaseBest100IDsLoader extends BaseBestItemsLoader {
 
     /**
      * Create an instance
@@ -15,7 +15,7 @@ public class Best100IDsLoader extends BestItemsLoader {
      * @param context a context of the application package implementing
      *                this class.
      */
-    public Best100IDsLoader(Context context) {
+    public BaseBest100IDsLoader(Context context) {
         super(context);
     }
 

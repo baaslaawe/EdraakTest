@@ -1,15 +1,16 @@
-package org.edraak.edraaktest.models.loaders;
+package org.edraak.edraaktest.models.loaders.bestitems;
 
 import android.content.Context;
 
 import org.edraak.edraaktest.adapters.CoursesAdapter;
+import org.edraak.edraaktest.models.loaders.CoursesCachingManager;
 import org.edraak.edraaktest.models.managers.BestItemsManagers;
 import org.edraak.edraaktest.models.thin.CourseModel;
 import org.edraak.edraaktest.models.thin.CoursesContainerModel;
 
 import java.util.List;
 
-public abstract class BestItemsLoader {
+public abstract class BaseBestItemsLoader {
 
     private CoursesCachingManager coursesCachingManager;
     private CoursesAdapter adapter;
@@ -20,7 +21,7 @@ public abstract class BestItemsLoader {
      * @param context a context of the application package implementing
      *                this class.
      */
-    BestItemsLoader(Context context) {
+    BaseBestItemsLoader(Context context) {
         init(context);
     }
 

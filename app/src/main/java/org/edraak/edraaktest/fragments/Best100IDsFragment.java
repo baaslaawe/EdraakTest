@@ -9,7 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.edraak.edraaktest.R;
-import org.edraak.edraaktest.models.loaders.Best100IDsLoader;
+import org.edraak.edraaktest.models.loaders.bestitems.BaseBest100IDsLoader;
 import org.edraak.edraaktest.utils.RecyclerViewManager;
 
 /**
@@ -19,7 +19,7 @@ import org.edraak.edraaktest.utils.RecyclerViewManager;
  */
 public class Best100IDsFragment extends BaseFragment {
 
-    private Best100IDsLoader best100IDsLoader;
+    private BaseBest100IDsLoader best100IDsLoader;
 
     public Best100IDsFragment() {
         // Required empty public constructor
@@ -39,7 +39,7 @@ public class Best100IDsFragment extends BaseFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        best100IDsLoader = new Best100IDsLoader(getContext());
+        best100IDsLoader = new BaseBest100IDsLoader(getContext());
     }
 
     @Override

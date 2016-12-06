@@ -9,7 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.edraak.edraaktest.R;
-import org.edraak.edraaktest.models.loaders.Best5CategoriesLoader;
+import org.edraak.edraaktest.models.loaders.bestitems.BaseBest5CategoriesLoader;
 import org.edraak.edraaktest.utils.RecyclerViewManager;
 
 /**
@@ -19,7 +19,7 @@ import org.edraak.edraaktest.utils.RecyclerViewManager;
  */
 public class Best5CategoriesFragment extends BaseFragment {
 
-    private Best5CategoriesLoader best5CategoriesLoader;
+    private BaseBest5CategoriesLoader best5CategoriesLoader;
 
     public Best5CategoriesFragment() {
         // Required empty public constructor
@@ -39,7 +39,7 @@ public class Best5CategoriesFragment extends BaseFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        best5CategoriesLoader = new Best5CategoriesLoader(getContext());
+        best5CategoriesLoader = new BaseBest5CategoriesLoader(getContext());
     }
 
     @Override
