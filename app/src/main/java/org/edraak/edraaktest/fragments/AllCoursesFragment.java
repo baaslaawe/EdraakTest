@@ -3,7 +3,6 @@ package org.edraak.edraaktest.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -14,6 +13,7 @@ import android.view.ViewGroup;
 
 import org.edraak.edraaktest.R;
 import org.edraak.edraaktest.models.loaders.CoursesLoader;
+import org.edraak.edraaktest.utils.RecyclerViewManager;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -60,12 +60,10 @@ public class AllCoursesFragment extends BaseFragment {
     protected void initViews(View rootView) {
         RecyclerView coursesList = (RecyclerView) rootView.findViewById(R.id.coursesList);
 
-        coursesList.setHasFixedSize(true);
-
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        coursesList.setLayoutManager(layoutManager);
-
-        coursesList.setAdapter(coursesLoader.getCoursesAdapter());
+        RecyclerViewManager.setVerticalRecyclerView(coursesList,
+                coursesLoader.getAdapter(),
+                true,
+                false);
     }
 
     @Override

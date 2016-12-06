@@ -4,7 +4,6 @@ import android.content.Context;
 
 import org.edraak.edraaktest.adapters.BaseListAdapter;
 import org.edraak.edraaktest.adapters.CoursesAdapter;
-import org.edraak.edraaktest.models.managers.BestItemsManagers;
 import org.edraak.edraaktest.models.services.CoursesService;
 import org.edraak.edraaktest.models.thin.CourseModel;
 import org.edraak.edraaktest.models.thin.CoursesContainerModel;
@@ -24,9 +23,7 @@ public class CoursesLoader extends LoaderRequestManager
     private long nextOffset = DEFAULT_OFFSET;
     private CoursesCachingManager coursesCachingManager;
 
-    private CoursesAdapter coursesAdapter;
-    private CoursesAdapter best100IdsAdapter;
-    private CoursesAdapter best5CategoriesAdapter;
+    private CoursesAdapter adapter;
 
     private boolean hasToRenew = true;
 
@@ -45,22 +42,19 @@ public class CoursesLoader extends LoaderRequestManager
     private void init(Context context) {
         coursesCachingManager = new CoursesCachingManager(context);
 
-        initAdapters(context);
+        initAdapter(context);
     }
 
-    private void initAdapters(Context context) {
-        coursesAdapter = new CoursesAdapter(context);
-        coursesAdapter.setEndless(true);
+    private void initAdapter(Context context) {
+        adapter = new CoursesAdapter(context);
+        adapter.setEndless(true);
 
-        coursesAdapter.setOnLastItemViewedListener(new BaseListAdapter.OnLastItemViewedListener() {
+        adapter.setOnLastItemViewedListener(new BaseListAdapter.OnLastItemViewedListener() {
             @Override
             public void onLastItemViewed(int position) {
                 checkToRetrieveNext();
             }
         });
-
-        best100IdsAdapter = new CoursesAdapter(context);
-        best5CategoriesAdapter = new CoursesAdapter(context);
     }
 
     @Override
@@ -69,33 +63,18 @@ public class CoursesLoader extends LoaderRequestManager
 
         useThisData(response);
 
-        cacheToFile(response, coursesAdapter.getList());
+        cacheToFile(response, adapter.getList());
     }
 
     private void useThisData(CoursesContainerModel response) {
         if (hasToRenew)
-            coursesAdapter.resetItems();
+            adapter.resetItems();
 
-        coursesAdapter.addItems(response.getResults());
+        adapter.addItems(response.getResults());
 
         this.nextOffset = response.getMeta().getNextOffset();
 
-        coursesAdapter.setIsLoadingMore(false);
-
-        linkBestCourses(coursesAdapter.getList());
-    }
-
-    private void linkBestCourses(List<CourseModel> courses) {
-        BestItemsManagers bestItemsManagers =
-                new BestItemsManagers(courses);
-
-        List<CourseModel> best100Ids = bestItemsManagers.getBest100CoursesBasedOnId();
-        best100IdsAdapter.resetItems();
-        best100IdsAdapter.addItems(best100Ids);
-
-        List<CourseModel> best5Categories = bestItemsManagers.getBest5CoursesBasedOnCategory();
-        best5CategoriesAdapter.resetItems();
-        best5CategoriesAdapter.addItems(best5Categories);
+        adapter.setIsLoadingMore(false);
     }
 
     private void cacheToFile(CoursesContainerModel response,
@@ -104,9 +83,9 @@ public class CoursesLoader extends LoaderRequestManager
     }
 
     private void checkToRetrieveNext() {
-        if (!coursesAdapter.isLoadingMore()) {
+        if (!adapter.isLoadingMore()) {
             retrieveNext();
-            coursesAdapter.setIsLoadingMore(true);
+            adapter.setIsLoadingMore(true);
         }
     }
 
@@ -130,7 +109,7 @@ public class CoursesLoader extends LoaderRequestManager
      * Retrieve data and clear the old
      */
     public void retrieve() {
-        coursesAdapter.resetItems();
+        adapter.resetItems();
 
         this.hasToRenew = true;
         this.nextOffset = DEFAULT_OFFSET;
@@ -141,7 +120,7 @@ public class CoursesLoader extends LoaderRequestManager
     /**
      * Retrieve the next page based on the next offset
      */
-    public void retrieveNext() {
+    private void retrieveNext() {
         this.hasToRenew = false;
 
         retrieveFromSource();
@@ -165,15 +144,7 @@ public class CoursesLoader extends LoaderRequestManager
         return nextOffset != DEFAULT_OFFSET;
     }
 
-    public CoursesAdapter getCoursesAdapter() {
-        return coursesAdapter;
-    }
-
-    public CoursesAdapter getBest100IdsAdapter() {
-        return best100IdsAdapter;
-    }
-
-    public CoursesAdapter getBest5CategoriesAdapter() {
-        return best5CategoriesAdapter;
+    public CoursesAdapter getAdapter() {
+        return adapter;
     }
 }
