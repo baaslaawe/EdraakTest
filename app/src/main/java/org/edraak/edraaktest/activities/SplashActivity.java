@@ -18,7 +18,7 @@ public class SplashActivity extends BaseActivity {
 
     @Override
     protected void initViews() {
-        startActivity(MainActivity.getIntentInstance(getApplicationContext()));
+        startActivity(SectionsActivity.getIntentInstance(getApplicationContext()));
         finish();
     }
 }
