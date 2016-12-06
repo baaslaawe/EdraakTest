@@ -30,40 +30,25 @@ public class BestItemsManagers {
     }
 
     public List<CourseModel> getBest100CoursesBasedOnId() {
-        List<CountCourseModel> bestCourses = getSortedBestCountCoursesList
-                (new CourseIdComparator());
+        List<CountCourseModel> sortedBestCountCourses =
+                getSortedBestCountCoursesList(new CourseIdComparator());
 
-        return getBestCourses(bestCourses, new CourseIdComparator(), 100);
+        return extractCoursesFromCountCourses(sortedBestCountCourses,
+                100);
     }
 
     public List<CourseModel> getBest5CoursesBasedOnCategory() {
-        List<CountCourseModel> bestCourses = getSortedBestCountCoursesList
-                (new CourseIdComparator());
+        List<CountCourseModel> sortedBestCountCourses =
+                getSortedBestCountCoursesList(new CourseCategoryComparator());
 
-        return getBestCourses(bestCourses, new CourseCategoryComparator(), 5);
-    }
-
-    private List<CourseModel> getBestCourses
-            (List<CountCourseModel> countCourseModelList,
-             Comparator<CountCourseModel> comparator, int limit) {
-
-        List<CountCourseModel> bestCountedCoursesList =
-                getSortedBestCountCoursesList(comparator);
-        List<CourseModel> bestCoursesList = new ArrayList<>();
-
-        int listSize = bestCountedCoursesList.size();
-        int count = Math.min(listSize, limit);
-        for (int i = 0; i < count; i++) {
-            CountCourseModel countCourseModel = countCourseModelList.get(i);
-            bestCoursesList.add(countCourseModel.getCourse());
-        }
-
-        return bestCoursesList;
+        return extractCoursesFromCountCourses(sortedBestCountCourses,
+                5);
     }
 
     private List<CountCourseModel> getSortedBestCountCoursesList
             (Comparator<CountCourseModel> comparator) {
-        List<CountCourseModel> bestCountedCoursesList = getBestCountCoursesList();
+        List<CountCourseModel> bestCountedCoursesList =
+                getBestCountCoursesList();
 
         Collections.sort(bestCountedCoursesList, comparator);
 
@@ -71,7 +56,8 @@ public class BestItemsManagers {
     }
 
     private List<CountCourseModel> getBestCountCoursesList() {
-        Map<Long, CountCourseModel> bestCountedCoursesMap = getBestCoursesMap();
+        Map<Long, CountCourseModel> bestCountedCoursesMap =
+                getBestCoursesMap();
 
         return new ArrayList<>(bestCountedCoursesMap.values());
     }
@@ -100,6 +86,21 @@ public class BestItemsManagers {
         }
 
         countList.put(key, countCourseModel);
+    }
+
+    private List<CourseModel> extractCoursesFromCountCourses
+            (List<CountCourseModel> sortedBestCountCourses, int limit) {
+
+        List<CourseModel> bestCoursesList = new ArrayList<>();
+
+        int listSize = sortedBestCountCourses.size();
+        int count = Math.min(listSize, limit);
+        for (int i = 0; i < count; i++) {
+            CountCourseModel countCourseModel = sortedBestCountCourses.get(i);
+            bestCoursesList.add(countCourseModel.getCourse());
+        }
+
+        return bestCoursesList;
     }
 
     private class CourseIdComparator implements Comparator<CountCourseModel> {

@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import org.edraak.edraaktest.R;
 import org.edraak.edraaktest.fragments.AllCoursesFragment;
 import org.edraak.edraaktest.fragments.Best100IDsFragment;
+import org.edraak.edraaktest.fragments.Best5CategoriesFragment;
 
 public class SectionsActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -92,7 +93,7 @@ public class SectionsActivity extends BaseActivity
     }
 
     private void showBest5Categories() {
-
+        changeFragment(Best5CategoriesFragment.newInstance());
     }
 
     private void changeFragment(Fragment fragment) {
