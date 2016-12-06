@@ -7,6 +7,9 @@ import org.edraak.edraaktest.models.thin.CourseModel;
 
 import java.util.List;
 
+/**
+ * Best 5 courses based on their categories
+ */
 public class BaseBest5CategoriesLoader extends BaseBestItemsLoader {
 
     /**

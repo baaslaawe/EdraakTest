@@ -10,6 +10,9 @@ import org.edraak.edraaktest.models.thin.CoursesContainerModel;
 
 import java.util.List;
 
+/**
+ * The base class for best items
+ */
 public abstract class BaseBestItemsLoader {
 
     private CoursesCachingManager coursesCachingManager;

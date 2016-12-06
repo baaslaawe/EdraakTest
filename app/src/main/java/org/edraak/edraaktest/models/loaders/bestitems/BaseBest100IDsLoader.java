@@ -7,6 +7,9 @@ import org.edraak.edraaktest.models.thin.CourseModel;
 
 import java.util.List;
 
+/**
+ * Best 100 courses based on their IDs
+ */
 public class BaseBest100IDsLoader extends BaseBestItemsLoader {
 
     /**
