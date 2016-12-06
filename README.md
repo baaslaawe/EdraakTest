@@ -1,7 +1,7 @@
 Edraak Test - Test App
 ================
 
-**Edrak App** is a chalenge app for [Edrak Organization][1] that uses an API to do the following:
+**Edrak App** is a challenge app for [Edrak Organization][1] that uses an API to do the following:
 
  1. Implement an Infinitely Scrolling List in Android.
  2. Create a view that shows the most 100 popular course IDs and the 5 most popular course category IDs so far.
