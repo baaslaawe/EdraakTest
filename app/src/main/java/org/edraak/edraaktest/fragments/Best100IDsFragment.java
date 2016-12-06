@@ -60,7 +60,7 @@ public class Best100IDsFragment extends BaseFragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         coursesList.setLayoutManager(layoutManager);
 
-        coursesList.setAdapter(best100IDsLoader.getBest100IdsAdapter());
+        coursesList.setAdapter(best100IDsLoader.getAdapter());
     }
 
     @Override
